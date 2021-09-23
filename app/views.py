@@ -11,3 +11,6 @@ def student(request):
             return HttpResponse('Form is Validated Succeefully')
 
     return render(request,'student.html',context={'form':form})
+
+def data(request,name):
+    return HttpResponse('person name is {}'.format(name))

@@ -1,5 +1,5 @@
 from django import forms
-
+from django.core import validators
 def check_for_a(value):
     if value[0].lower()=='a':
         raise forms.ValidationError('name should not start with a')
@@ -14,17 +14,12 @@ def check_for_age(value):
 
 
 class StudentForm(forms.Form):
-    name=forms.CharField(max_length=100,validators=[check_for_a,check_for_len])
+    name=forms.CharField(max_length=100,validators=[check_for_a,validators.MaxLengthValidator(5)])
     age=forms.IntegerField(validators=[check_for_age])
-    email=forms.EmailField(max_length=100)
-    reenteremail=forms.EmailField(max_length=100)
+    mobile=forms.CharField(validators=[validators.RegexValidator('[6-9]\d{9}')])
+    #email=forms.EmailField(max_length=100)
+    #reenteremail=forms.EmailField(max_length=100)
     botcatcher=forms.CharField(max_length=100,required=False,widget=forms.HiddenInput)
-
-    def clean(self):
-        e=self.cleaned_data['email']
-        r=self.cleaned_data['reenteremail']
-        if e!=r:
-            raise forms.ValidationError('emails are not matched')
 
     def clean_botcatcher(self):
         bot=self.cleaned_data['botcatcher']
